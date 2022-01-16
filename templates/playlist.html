@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Playlist
+{% endblock %}
+
+{% block main %}
+
+    <main role="main" class="inner cover">
+
+      <img src="static/Spotify.png" width="400.5" height="120" style = "margin-bottom: 50px">
+
+      <h1 class="cover-heading" style="color:#1DB954">Spotify Analitics</h1>
+      <h2 class="cover-heading" style="color:#FFFFFF">Custom playlist analyzer</h2>
+      <p class="lead" style = "margin-top: 50px">Please CTRL + V the link to the playlist you want analize!</p>
+
+      <p class="lead" style = "margin-top: 75px"></p>
+        <form action="/playlist" method="post">
+          <div class="mb-3">
+              <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="url" name="url" placeholder="Example: https://open.spotify.com/playlist/37i9dQZEVXbNG2KDcFcKOF" type="text" size="65")>
+              <p id="mesaje" style="color:#FF0000"></p>
+          </div>
+          <script>
+
+              var x = {{ error }};
+
+              function myFunction() {
+                if(x == 0)
+                {
+                  txt = "";
+                }
+                else
+                {
+                    txt = "Invalid URL! Please try again!";
+                }
+                document.getElementById("mesaje").innerHTML = txt;
+              }
+
+          </script>
+
+          <p class="lead" style = "margin-top: 75px"></p>
+            <button class="btn btn-lg btn-secondary" type="submit">Send!</button>
+          </p>
+        </form>
+      </p>
+    </main>
+
+{% endblock %}

@@ -55,9 +55,11 @@ for track in playlist_information:
     information[i]['artist_uri'] = artist_uri
     information[i]['album'] = album
 
+    cover = playlist_cover_image(playlist_URI)
+
     i = i + 1
 
-    print(information)
+    print(cover)
 
 
 

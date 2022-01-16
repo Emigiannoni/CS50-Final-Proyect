@@ -18,26 +18,8 @@
         <form action="/playlist" method="post">
           <div class="mb-3">
               <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="url" name="url" placeholder="Example: https://open.spotify.com/playlist/37i9dQZEVXbNG2KDcFcKOF" type="text" size="65")>
-              <p id="mesaje" style="color:#FF0000"></p>
+              <p id="mesaje" style="color:#FF0000">{{ error }}</p>
           </div>
-          <script>
-
-              var x = {{ error }};
-
-              function myFunction() {
-                if(x == 0)
-                {
-                  txt = "";
-                }
-                else
-                {
-                    txt = "Invalid URL! Please try again!";
-                }
-                document.getElementById("mesaje").innerHTML = txt;
-              }
-
-          </script>
-
           <p class="lead" style = "margin-top: 75px"></p>
             <button class="btn btn-lg btn-secondary" type="submit">Send!</button>
           </p>

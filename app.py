@@ -78,21 +78,33 @@ def playlist():
         try:
             
             playlist_information = sp.playlist_tracks(playlist_URI)["items"]
+
+            src = "https://open.spotify.com/embed/playlist/" +playlist_URI+ "?utm_source=generator"
+
+            cover = sp.playlist_cover_image(playlist_URI)[0]['url']
         
         except:
 
-            playlist_information = 0
+            playlist_information = 1
 
-        if playlist_information == 0:
+        if playlist_information == 1:
                 
-            error = 1
+            error = 'Invalid URL, please try again!'
 
             return render_template("playlist.html", error = error)
             
         else:
-                
-            return render_template("playlist-results.html", playlist_information)
+
+            time = 0
+
+            for track in playlist_information:
+
+                time = time + (track["track"]["duration_ms"] / 60000)
+
+            timef = round(time, 2)
+
+            return render_template("playlist-results.html", info = playlist_information, src = src, cover = cover, time = timef)
 
     else:
 
-        return render_template("playlist.html", error = 0)
+        return render_template("playlist.html")

@@ -16,21 +16,24 @@ scope = "user-library-read"
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager) 
 sp.trace=False
 
-playlist_link = "asd"
+playlist_link = "https://open.spotify.com/playlist/37i9dQZEVXbNG2KDcFcKOF?si=1333723a6eff4b7f"
 playlist_URI = playlist_link.split("/")[-1].split("?")[0]
 
-try:
             
-    playlist_information = sp.playlist_tracks(playlist_URI)["items"]
-        
-except:
+playlist_information = sp.playlist_tracks(playlist_URI)["items"]
 
-    playlist_information = 1
+cover = sp.playlist_cover_image(playlist_URI)[0]['url']
 
-if playlist_information == 1:
-                
-    error = 1
+imagen = sp.playlist_tracks(playlist_URI)["items"][0]["track"]["album"]["images"][2]['url']
 
 
-print(error)
+time = 0
+
+for track in playlist_information:
+
+    time = time + (track["track"]["duration_ms"] / 60000)
+
+time = round(time, 2)
+
+print(time)
 

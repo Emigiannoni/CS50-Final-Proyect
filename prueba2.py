@@ -1,7 +1,10 @@
 # ---------------------------------------------------------------
 # SPOTIFY API accessing and configuration using SPOTIFY library
 # ---------------------------------------------------------------
-
+import os
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
@@ -16,24 +19,58 @@ scope = "user-library-read"
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager) 
 sp.trace=False
 
-playlist_link = "https://open.spotify.com/playlist/37i9dQZEVXbNG2KDcFcKOF?si=1333723a6eff4b7f"
+playlist_link = "https://open.spotify.com/playlist/2kZRc4eOwonZVY2oSibdKd"
 playlist_URI = playlist_link.split("/")[-1].split("?")[0]
 
             
 playlist_information = sp.playlist_tracks(playlist_URI)["items"]
 
-cover = sp.playlist_cover_image(playlist_URI)[0]['url']
-
-imagen = sp.playlist_tracks(playlist_URI)["items"][0]["track"]["album"]["images"][2]['url']
-
-
-time = 0
+release_date = []
 
 for track in playlist_information:
+    
+    release_date.append(track["track"]["album"]["release_date"])
 
-    time = time + (track["track"]["duration_ms"] / 60000)
+release_year = []
 
-time = round(time, 2)
+for date in release_date:
 
-print(time)
+    release_year.append(date.split("'")[0].split("-")[0])
 
+songsxyear = {}
+
+for year in release_year:
+
+    if year in songsxyear.keys():
+
+        songsxyear[year] = songsxyear[year] + 1
+
+    else:
+
+        songsxyear[year] = 1
+
+#Definimos una lista con anos como string
+
+years = []
+
+for year in songsxyear:
+
+    years.append(year)
+
+sorted_years = sorted(years)
+
+#Definimos una lista con numero de canciones como entero
+
+songs = []
+
+for year in sorted_years:
+
+    number = songsxyear[year]
+
+    songs.append(number)
+
+print(release_date)
+print(release_year)
+print(songsxyear)
+print(sorted_years)
+print(songs)

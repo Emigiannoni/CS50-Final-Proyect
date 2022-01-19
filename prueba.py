@@ -1,7 +1,11 @@
 # ---------------------------------------------------------------
 # SPOTIFY API accessing and configuration using SPOTIFY library
 # ---------------------------------------------------------------
-
+import os
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import operator
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
@@ -16,50 +20,70 @@ scope = "user-library-read"
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager) 
 sp.trace=False
 
-playlist_link = "https://open.spotify.com/playlist/37i9dQZEVXbNG2KDcFcKOF?si=1333723a6eff4b7f"
+playlist_link = "https://open.spotify.com/playlist/2kZRc4eOwonZVY2oSibdKd"
 playlist_URI = playlist_link.split("/")[-1].split("?")[0]
-track_uris = [x["track"]["uri"] for x in sp.playlist_tracks(playlist_URI)["items"]]
 
+            
 playlist_information = sp.playlist_tracks(playlist_URI)["items"]
 
-information = []
-
-songs = {
-    'track_name' : 0,
-    'track_uri' : 0,
-    'artist_name' : 0,
-    'artist_uri' : 0,
-    'album' : 0
-}
-
-i = 0
+artists = []
 
 for track in playlist_information:
 
-    information.append(songs)
-
-    #Track name
-    track_name = track["track"]["name"]
-    track_uri = track["track"]["uri"]
+    if len(track["track"]["artists"]) > 1:
     
-    #Main Artist
-    artist_uri = track["track"]["artists"][0]["uri"]
-    artist_name = track["track"]["artists"][0]["name"]
+        for artist in track["track"]["artists"]:
+
+            artists.append(artist["id"])
     
-    #Album
-    album = track["track"]["album"]["name"]
+    else:
 
-    information[i]['track_name'] = track_name
-    information[i]['track_uri'] = track_uri
-    information[i]['artist_name'] = artist_name
-    information[i]['artist_uri'] = artist_uri
-    information[i]['album'] = album
+        artists.append(track["track"]["artists"][0]["id"])
+ 
+top_artist = {} #artista y numero de apariciones
 
-    cover = playlist_cover_image(playlist_URI)
+for artist in artists:
 
-    i = i + 1
+    if artist in top_artist:
 
-    print(cover)
+        top_artist[artist] = top_artist[artist] + 1
 
+    else:
 
+        top_artist[artist] = 1
 
+top_artist_sorted = sorted(top_artist.items(), key=operator.itemgetter(1), reverse=True)
+
+top10_artist_sorted = []
+
+i = 0
+
+for artist in top_artist_sorted:
+
+    if i < 10:
+
+        top10_artist_sorted.append(artist)
+
+        i = i + 1
+
+    else:
+
+        pass
+
+id_top_artist = []
+
+for artist in top10_artist_sorted:
+
+    id_top_artist.append(artist[0])
+
+artist_information = []
+
+for artist_id in id_top_artist:
+
+    artist_information.append(sp.artist(artist_id))
+
+for i in range(len(artist_information)):
+
+    artist_information[i]['apariciones'] = top10_artist_sorted[i][1]
+
+print(artist_information)

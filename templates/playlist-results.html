@@ -45,9 +45,9 @@
                         <tbody>
                         {% for tracks in info %}
                             <tr>
-                                <td><img src="{{ tracks["track"]["album"]["images"][2]["url"] }}"></td>
+                                <td><a href="{{tracks["track"]["album"]["external_urls"]["spotify"]}}"><img src="{{ tracks["track"]["album"]["images"][2]["url"] }}"></a></td>
                                 <td>{{ tracks["track"]["name"] }}</td>
-                                <td>{{ tracks["track"]["artists"][0]["name"] }}</td>
+                                <td><a href="{{tracks["track"]["artists"][0]["external_urls"]["spotify"]}}">{{ tracks["track"]["artists"][0]["name"] }}</a></td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -62,10 +62,49 @@
                   </a>
                 </div>
                 <div id="collapseThree" class="collapse" data-bs-parent="#accordion">
-                  <div class="card-body">
-                    
+                  <div class="card-body">                   
                         <h3> {{ time }} minutes. </h3>
-
+                  </div>
+                </div>
+              </div>
+              <div class="card text-white bg-dark mb-3" style="width: 500px;">
+                <div class="card-header">
+                  <a class="collapsed btn" data-bs-toggle="collapse" href="#collapseFour">
+                    <h2 style="color: whitesmoke;">Number of songs over the years:</h2>
+                  </a>
+                </div>
+                <div id="collapseFour" class="collapse" data-bs-parent="#accordion">
+                  <div class="card-body"> 
+                    <img src="static/barras_simple.png" width="480" height="360">
+                  </div>
+                </div>
+              </div>
+              <div class="card text-white bg-dark mb-3" style="width: 500px;">
+                <div class="card-header">
+                  <a class="collapsed btn" data-bs-toggle="collapse" href="#collapseFive">
+                    <h2 style="color: whitesmoke;">Top10 artist's appearances:</h2>
+                  </a>
+                </div>
+                <div id="collapseFive" class="collapse" data-bs-parent="#accordion">
+                  <div class="card-body"> 
+                    <table class="table table-responsive table-dark table-striped">
+                      <thead>
+                          <tr>
+                              <th>Photo</th>
+                              <th>Artist name</th>
+                              <th>Appearances</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      {% for register in artist_information %}
+                          <tr>
+                              <td><img src="{{ register["images"][2]["url"] }}"></td>
+                              <td>{{ register["name"] }}</td>
+                              <td>{{ register["apariciones"] }}</td>
+                          </tr>
+                      {% endfor %}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>

@@ -7,8 +7,8 @@
 # -----------------------------------------------------------
 
 import os
-import pandas as pd
-import numpy as np
+import matplotlib.pyplot as plt
+import operator
 
 # ---------------------------------------------------------------
 # SPOTIFY API accessing and configuration using SPOTIFY library
@@ -103,7 +103,133 @@ def playlist():
 
             timef = round(time, 2)
 
-            return render_template("playlist-results.html", info = playlist_information, src = src, cover = cover, time = timef)
+            release_date = []
+
+            for track in playlist_information:
+                
+                release_date.append(track["track"]["album"]["release_date"])
+
+            release_year = []
+
+            for date in release_date:
+
+                release_year.append(date.split("'")[0].split("-")[0])
+
+            songsxyear = {}
+
+            for year in release_year:
+
+                if year in songsxyear.keys():
+
+                    songsxyear[year] = songsxyear[year] + 1
+
+                else:
+
+                    songsxyear[year] = 1
+
+            #Definimos una lista con anos como string
+
+            years = []
+
+            for year in songsxyear:
+
+                years.append(year)
+
+            sorted_years = sorted(years)
+
+            #Definimos una lista con numero de canciones como entero
+
+            songs = []
+
+            for year in sorted_years:
+
+                number = songsxyear[year]
+
+                songs.append(number)
+
+            fig, ax = plt.subplots()
+
+            #Colocamos una etiqueta en el eje Y
+
+            ax.set_ylabel('Songs')
+
+            #Colocamos una etiqueta en el eje X
+
+            ax.set_title('Year')
+
+            #Creamos la grafica de barras utilizando 'paises' como eje X y 'ventas' como eje y.
+
+            plt.bar(sorted_years, songs)
+
+            plt.savefig('static/barras_simple.png')
+
+            ###########################################
+            
+            #Funcion artistas principales e info
+
+            artists = []
+
+            for track in playlist_information:
+
+                if len(track["track"]["artists"]) > 1:
+                
+                    for artist in track["track"]["artists"]:
+
+                        artists.append(artist["id"])
+                
+                else:
+
+                    artists.append(track["track"]["artists"][0]["id"])
+
+            top_artist = {}
+
+            for artist in artists:
+
+                if artist in top_artist:
+
+                    top_artist[artist] = top_artist[artist] + 1
+
+                else:
+
+                    top_artist[artist] = 1
+
+            top_artist_sorted = sorted(top_artist.items(), key=operator.itemgetter(1), reverse=True)
+
+            top10_artist_sorted = []
+
+            i = 0
+
+            for artist in top_artist_sorted:
+
+                if i < 10:
+
+                    top10_artist_sorted.append(artist)
+
+                    i = i + 1
+
+                else:
+
+                    pass
+
+            id_top_artist = []
+
+            for artist in top10_artist_sorted:
+
+                id_top_artist.append(artist[0])
+
+            artist_information = []
+
+            for artist_id in id_top_artist:
+
+                artist_information.append(sp.artist(artist_id))
+
+            for i in range(len(artist_information)):
+
+                artist_information[i]['apariciones'] = top10_artist_sorted[i][1]
+
+            ####################################################
+
+            return render_template("playlist-results.html", info = playlist_information, src = src, cover = cover, time = timef, artist_information = artist_information)
 
     else:
 

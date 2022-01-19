@@ -227,7 +227,6 @@ def playlist():
 
                 artist_information[i]['apariciones'] = top10_artist_sorted[i][1]
 
-            ####################################################
 
             return render_template("playlist-results.html", info = playlist_information, src = src, cover = cover, time = timef, artist_information = artist_information)
 

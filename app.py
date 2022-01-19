@@ -162,8 +162,6 @@ def playlist():
             plt.bar(sorted_years, songs)
 
             plt.savefig('static/barras_simple.png')
-
-            ###########################################
             
             #Funcion artistas principales e info
 
